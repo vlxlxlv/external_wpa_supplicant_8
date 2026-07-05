@@ -3841,6 +3841,9 @@ static int wpa_ver_supported(struct wpa_driver_nl80211_data *drv,
 		ver |= NL80211_WPA_VERSION_1;
 	if (proto & WPA_PROTO_RSN) {
 		if (drv->chip_vendor_id != OUI_BRCM) {
+#if defined(CONFIG_DISABLE_WPA_VERSION_3)
+			ver |= NL80211_WPA_VERSION_2;
+#else
 			/*
 			* NL80211_ATTR_SAE_PASSWORD is related and was added
 			* at the same time as NL80211_WPA_VERSION_3.
@@ -3850,6 +3853,7 @@ static int wpa_ver_supported(struct wpa_driver_nl80211_data *drv,
 				ver |= NL80211_WPA_VERSION_3;
 			else
 				ver |= NL80211_WPA_VERSION_2;
+#endif
 		} else {
 			ver |= NL80211_WPA_VERSION_2;
 		}
